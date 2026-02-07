@@ -366,6 +366,43 @@ class AudioSeparationRequest(BaseModel):
 
 
 # =============================================================================
+# Embeddings
+# =============================================================================
+
+
+class EmbeddingRequest(BaseModel):
+    """Request for text embeddings (OpenAI compatible)."""
+
+    input: Union[str, List[str]]
+    model: str
+    encoding_format: Optional[str] = "float"  # "float" or "base64"
+
+
+class EmbeddingData(BaseModel):
+    """A single embedding result."""
+
+    object: str = "embedding"
+    index: int
+    embedding: List[float]
+
+
+class EmbeddingUsage(BaseModel):
+    """Token usage for embedding requests."""
+
+    prompt_tokens: int = 0
+    total_tokens: int = 0
+
+
+class EmbeddingResponse(BaseModel):
+    """Response for embeddings endpoint (OpenAI compatible)."""
+
+    object: str = "list"
+    data: List[EmbeddingData]
+    model: str
+    usage: EmbeddingUsage = Field(default_factory=EmbeddingUsage)
+
+
+# =============================================================================
 # Streaming (for SSE responses)
 # =============================================================================
 
