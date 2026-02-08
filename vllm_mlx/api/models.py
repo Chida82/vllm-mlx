@@ -381,9 +381,9 @@ class AudioSeparationRequest(BaseModel):
 class EmbeddingRequest(BaseModel):
     """Request for text embeddings (OpenAI compatible)."""
 
-    input: Union[str, List[str]]
+    input: str | list[str]
     model: str
-    encoding_format: Optional[str] = "float"  # "float" or "base64"
+    encoding_format: str | None = "float"  # "float" or "base64"
 
 
 class EmbeddingData(BaseModel):
@@ -391,7 +391,7 @@ class EmbeddingData(BaseModel):
 
     object: str = "embedding"
     index: int
-    embedding: List[float]
+    embedding: list[float]
 
 
 class EmbeddingUsage(BaseModel):
@@ -405,7 +405,7 @@ class EmbeddingResponse(BaseModel):
     """Response for embeddings endpoint (OpenAI compatible)."""
 
     object: str = "list"
-    data: List[EmbeddingData]
+    data: list[EmbeddingData]
     model: str
     usage: EmbeddingUsage = Field(default_factory=EmbeddingUsage)
 
