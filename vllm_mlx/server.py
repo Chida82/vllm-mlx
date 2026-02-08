@@ -1198,8 +1198,8 @@ async def stream_chat_completion(
     )
     yield f"data: {first_chunk.model_dump_json()}\n\n"
 
-    # Track if we need to add  prefix for thinking models (when no reasoning parser)
-    # The template adds  to the prompt, so the model output starts inside the think block
+    # Track if we need to add <think> prefix for thinking models (when no reasoning parser)
+    # The template adds <think> to the prompt, so the model output starts inside the think block
     is_thinking_model = "nemotron" in request.model.lower() and not _reasoning_parser
     think_prefix_sent = False
 
@@ -1235,7 +1235,7 @@ async def stream_chat_completion(
             )
 
             if delta_msg is None:
-                # Skip this chunk (e.g.,  token itself)
+                # Skip this chunk (e.g., <think> token itself)
                 continue
 
             chunk = ChatCompletionChunk(
@@ -1257,9 +1257,9 @@ async def stream_chat_completion(
             # Standard path without reasoning parsing
             content = delta_text
 
-            # Add  prefix on first content chunk for thinking models
+            # Add <think> prefix on first content chunk for thinking models
             if is_thinking_model and not think_prefix_sent and content:
-                content = "" + content
+                content = "<think>" + content
                 think_prefix_sent = True
 
             chunk = ChatCompletionChunk(
